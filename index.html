@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ritika Ugale — Data Scientist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#0A0C10;
+    --ink:#F4F5F1;
+    --ink-soft:#A2A8B8;
+    --line:#262930;
+    --indigo:#535CDB;
+    --coral:#FF6B4A;
+    --teal:#14B8B4;
+    --card:#12151C;
+    --radius:4px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  .mono{font-family:'JetBrains Mono',monospace;}
+  a{color:inherit;}
+  ::selection{background:var(--indigo);color:var(--ink);}
+
+  /* ---------- Nav & Massive Identity ---------- */
+  nav {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 40px clamp(20px, 5vw, 64px) 20px;
+    background: var(--paper);
+    gap: 24px;
+    z-index: 20;
+  }
+  .nav-top {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .nav-name {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    letter-spacing: -.02em;
+    line-height: 0.9;
+    color: var(--ink);
+  }
+  .nav-links {
+    display: flex;
+    gap: 28px;
+    list-style: none;
+    border-bottom: 1px solid var(--line);
+    width: 100%;
+    padding-bottom: 12px;
+  }
+  .nav-links a {
+    font-size: .82rem;
+    text-decoration: none;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    font-weight: 600;
+    padding-bottom: 10px;
+    position: relative;
+    transition: color .2s;
+    cursor: pointer;
+  }
+  .nav-links li.active a {
+    color: var(--indigo);
+  }
+  .nav-links li.active a::after {
+    content: '';
+    position: absolute;
+    bottom: -13px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--indigo);
+  }
+  @media(max-width:640px){
+    .nav-links { gap: 14px; flex-wrap: wrap; }
+    .nav-links a { font-size: .72rem; }
+  }
+
+  /* ---------- Viewport / Transitions ---------- */
+  main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .portfolio-section {
+    display: none;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    padding: 40px clamp(20px, 5vw, 64px) 76px;
+    max-width: 1320px;
+    width: 100%;
+    margin: 0 auto;
+  }
+  .portfolio-section.active {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ---------- Hero Section ---------- */
+  .hero {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    align-items: center;
+    gap: 40px;
+    width: 100%;
+  }
+  @media(max-width:900px){.hero{grid-template-columns:1fr;}}
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace; font-size: .85rem; color: var(--teal);
+    letter-spacing: .06em; margin-bottom: 18px; display: flex; align-items: center; gap: 10px;
+  }
+  .eyebrow::before { content: ''; width: 24px; height: 1px; background: var(--teal); display: inline-block; }
+  
+  /* Reduced the font size specifically for the headline element */
+  h1 {
+    font-family: 'Fraunces', serif; font-weight: 500;
+    font-size: clamp(1.3rem, 2.4vw, 1.9rem); line-height: 1.2; letter-spacing: -.01em;
+    margin-bottom: 22px;
+  }
+  h1 em { font-style: italic; color: var(--indigo); text-shadow: 0 0 20px rgba(83, 92, 219, 0.2); }
+  .hero-desc { max-width: 46ch; color: var(--ink-soft); font-size: 1.1rem; margin-bottom: 30px; }
+  .hero-cta { display: flex; gap: 14px; flex-wrap: wrap; }
+
+  /* Hero Side Visual Window */
+  .hero-visual {
+    position: relative;
+    aspect-ratio: 1/0.92;
+    width: 100%;
+  }
+  #embed-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .visual-caption {
+    position: absolute;
+    bottom: -30px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .7rem;
+    color: var(--ink-soft);
+    letter-spacing: .04em;
+  }
+  
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 24px; font-size: .88rem; text-decoration: none;
+    border-radius: var(--radius); letter-spacing: .02em; font-weight: 500;
+    transition: transform .15s ease, background .2s; cursor: pointer;
+  }
+  .btn-primary { background: var(--ink); color: var(--paper); border: none; }
+  .btn-primary:hover { background: var(--indigo); color: var(--ink); transform: translateY(-1px); }
+  .btn-ghost { border: 1px solid var(--ink); color: var(--ink); background: transparent; }
+  .btn-ghost:hover { border-color: var(--indigo); color: var(--indigo); transform: translateY(-1px); }
+
+  /* ---------- Architecture Shells ---------- */
+  .section-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 40px; }
+  .section-title { font-family: 'Fraunces', serif; font-weight: 500; font-size: clamp(1.8rem, 3vw, 2.5rem); }
+  .section-tag { font-family: 'JetBrains Mono', monospace; font-size: .76rem; color: var(--ink-soft); letter-spacing: .06em; text-transform: uppercase; }
+  hr.rule { border: none; border-top: 1px solid var(--line); margin-bottom: 40px; }
+
+  /* ---------- About ---------- */
+  .about-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 56px; }
+  @media(max-width:800px){ .about-grid { grid-template-columns: 1fr; gap: 32px; } }
+  .about-text p { color: var(--ink-soft); margin-bottom: 20px; max-width: 60ch; font-size: 1.05rem; }
+  .stat-list { display: flex; flex-direction: column; border-top: 1px solid var(--line); background: var(--card); padding: 0 16px; border-radius: var(--radius); border: 1px solid var(--line); }
+  .stat-row { display: flex; justify-content: space-between; padding: 16px 0; border-bottom: 1px solid var(--line); gap: 10px; }
+  .stat-row:last-child { border-bottom: none; }
+  .stat-label { color: var(--ink-soft); font-size: .88rem; min-width: 120px; }
+  .stat-value { font-family: 'JetBrains Mono', monospace; font-size: .9rem; color: var(--indigo); text-align: right; }
+
+  /* ---------- Experience ---------- */
+  .timeline { border-top: 1px solid var(--line); }
+  .tl-item { display: grid; grid-template-columns: 180px 1fr; gap: 32px; padding: 32px 0; border-bottom: 1px solid var(--line); }
+  @media(max-width:700px){ .tl-item { grid-template-columns: 1fr; gap: 8px; } }
+  .tl-date { font-family: 'JetBrains Mono', monospace; font-size: .82rem; color: var(--teal); }
+  .tl-role { font-family: 'Fraunces', serif; font-size: 1.35rem; font-weight: 500; margin-bottom: 4px; }
+  .tl-org { color: var(--ink-soft); font-size: .95rem; margin-bottom: 14px; font-weight: 500; }
+  .tl-item ul { padding-left: 18px; color: var(--ink-soft); font-size: .98rem; }
+  .tl-item li { margin-bottom: 8px; }
+
+  /* ---------- Projects: BOOK ---------- */
+  .book-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px 0 10px;
+  }
+  .book {
+    position: relative;
+    width: 100%;
+    max-width: 960px;
+    aspect-ratio: 16/9;
+    perspective: 2600px;
+  }
+  /* Stacked pages behind the book to give it depth like a real closed book */
+  .book::before, .book::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    z-index: -1;
+  }
+  .book::before { transform: translate(6px, 8px) rotate(0.6deg); opacity: .55; }
+  .book::after  { transform: translate(12px, 16px) rotate(1.1deg); opacity: .3; }
+
+  .book-page-static {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background:
+      repeating-linear-gradient(rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 28px),
+      var(--card);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.55), 0 4px 12px rgba(0,0,0,0.3);
+    overflow: hidden;
+    transform-style: preserve-3d;
+    transform-origin: left center;
+  }
+  /* Gutter shadow down the spine, like light falling into an open book */
+  .book-spine {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 60px;
+    margin-left: -30px;
+    background: linear-gradient(to right,
+      transparent, rgba(0,0,0,0.35) 46%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0.35) 54%, transparent);
+    z-index: 5;
+    pointer-events: none;
+  }
+  .book-side {
+    position: relative;
+    padding: 46px 44px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    z-index: 1;
+    overflow-y: auto;
+    max-height: 100%;
+  }
+  .book-left { padding-right: 52px; }
+  .book-right { padding-left: 52px; }
+
+  /* Ghost numeral watermark behind the left page title */
+  .book-left::before {
+    content: attr(data-num);
+    position: absolute;
+    top: 8px;
+    right: 20px;
+    font-family: 'Fraunces', serif;
+    font-size: 7rem;
+    font-weight: 600;
+    color: var(--ink);
+    opacity: 0.05;
+    line-height: 1;
+    pointer-events: none;
+  }
+  /* Corner page-curl hint, bottom right of the right page */
+  .book-right::after {
+    content: '';
+    position: absolute;
+    right: 0; bottom: 0;
+    width: 34px; height: 34px;
+    background: linear-gradient(135deg, transparent 50%, rgba(255,255,255,0.06) 50%);
+    border-top-left-radius: 4px;
+    pointer-events: none;
+  }
+
+  .ribbon {
+    position: absolute;
+    top: 0;
+    left: 44px;
+    width: 26px;
+    padding: 8px 0 14px;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .68rem;
+    font-weight: 600;
+    color: var(--paper);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 82%, 0 100%);
+    z-index: 3;
+  }
+  .page-index {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .72rem;
+    color: var(--ink-soft);
+    letter-spacing: .08em;
+    margin-bottom: 18px;
+    margin-top: 20px;
+  }
+  .page-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(1.5rem, 2.6vw, 2.1rem);
+    font-weight: 500;
+    line-height: 1.15;
+    margin-bottom: 18px;
+    color: var(--ink);
+    position: relative;
+  }
+  .page-metric {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .92rem;
+    color: var(--coral);
+    font-weight: 500;
+    padding: 8px 14px;
+    border: 1px dashed rgba(255,107,74,0.4);
+    border-radius: 3px;
+    width: fit-content;
+  }
+  .page-desc {
+    color: var(--ink-soft);
+    font-size: .89rem;
+    line-height: 1.55;
+    margin-bottom: 20px;
+    padding-left: 18px;
+  }
+  .page-desc li {
+    margin-bottom: 10px;
+  }
+  .page-desc li::marker {
+    color: var(--coral);
+  }
+  .skills-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .7rem;
+    color: var(--teal);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+  .page-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+
+  .book-flip {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    color: var(--ink);
+    cursor: pointer;
+    font-size: 1.2rem;
+    z-index: 10;
+    transition: border-color .2s, color .2s, transform .2s;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+  }
+  .book-flip:hover { border-color: var(--indigo); color: var(--indigo); transform: translateY(-50%) scale(1.08); }
+  .book-prev { left: -23px; }
+  .book-next { right: -23px; }
+  @media(max-width:700px){
+    .book-page-static { grid-template-columns: 1fr; }
+    .book-spine { display: none; }
+    .book { aspect-ratio: auto; }
+    .book-side { padding: 34px 26px; }
+    .book-left { display: none; }
+    .book-left::before { display: none; }
+    .book-flip { width: 40px; height: 40px; }
+    .book-prev { left: -8px; }
+    .book-next { right: -8px; }
+  }
+  .book-progress {
+    text-align: center;
+    margin-top: 30px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .78rem;
+    color: var(--ink-soft);
+    letter-spacing: .05em;
+  }
+
+  /* ---------- Skills ---------- */
+  .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+  .skill-block { padding: 26px; border: 1px solid var(--line); background: var(--card); border-radius: var(--radius); }
+  .skill-cat { font-family: 'JetBrains Mono', monospace; font-size: .75rem; color: var(--teal); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 12px; font-weight: 600; }
+  .skill-items { color: var(--ink-soft); font-size: .94rem; line-height: 1.6; }
+
+  /* ---------- Education ---------- */
+  .edu-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 56px; }
+  @media(max-width:800px){ .edu-grid { grid-template-columns: 1fr; gap: 36px; } }
+  .edu-item { margin-bottom: 30px; }
+  .edu-degree { font-family: 'Fraunces', serif; font-size: 1.25rem; font-weight: 500; margin-bottom: 4px; }
+  .edu-school { color: var(--ink-soft); font-size: .95rem; }
+  .edu-date { font-family: 'JetBrains Mono', monospace; font-size: .78rem; color: var(--teal); margin-top: 4px; }
+  .cert-list { list-style: none; color: var(--ink-soft); font-size: .95rem; }
+  .cert-list li { padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .lang-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--line); font-size: .95rem; color: var(--ink-soft); }
+  .lang-level { font-family: 'JetBrains Mono', monospace; color: var(--indigo); }
+
+  /* ---------- Contact / Footer ---------- */
+  footer { padding: 40px clamp(20px, 5vw, 64px) 40px; max-width: 1320px; width: 100%; margin: auto auto 0; z-index: 10; }
+  .footer-inner { border-top: 1px solid var(--line); padding-top: 40px; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 24px; }
+  .footer-title { font-family: 'Fraunces', serif; font-size: clamp(1.3rem, 2.4vw, 1.8rem); font-weight: 500; max-width: 16ch; line-height: 1.15; }
+  .footer-links { display: flex; flex-direction: column; gap: 10px; align-items: flex-end; }
+  @media(max-width: 640px){ .footer-links{ align-items: flex-start; } }
+  .footer-links a { text-decoration: none; font-size: .95rem; border-bottom: 1px solid transparent; transition: border-color .2s, color .2s; font-weight: 500; color: var(--ink-soft); }
+  .footer-links a:hover { border-color: var(--indigo); color: var(--indigo); }
+  .copyright { margin-top: 40px; font-family: 'JetBrains Mono', monospace; font-size: .72rem; color: var(--ink-soft); }
+
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-top">
+    <div class="nav-name">Ritika Ugale</div>
+  </div>
+  <ul class="nav-links">
+    <li class="active"><a onclick="switchSection('hero-view')">Overview</a></li>
+    <li><a onclick="switchSection('about')">About</a></li>
+    <li><a onclick="switchSection('experience')">Experience</a></li>
+    <li><a onclick="switchSection('projects')">Projects</a></li>
+    <li><a onclick="switchSection('skills')">Skills</a></li>
+    <li><a onclick="switchSection('education')">Education</a></li>
+  </ul>
+</nav>
+
+<main>
+  <!-- SECTION: HERO/OVERVIEW -->
+  <div id="hero-view" class="portfolio-section active">
+    <div class="hero">
+      <div>
+        <div class="eyebrow">Working Student, MPI for Human Development & M.Sc. Data Science</div>
+        <h1>Turning raw data into <em>retrievable</em> knowledge.</h1>
+        <p class="hero-desc">I turn data into decisions — with a toolkit spanning Python, ML, and LLMs, and a curiosity that never really clocks out.</p>
+        <div class="hero-cta">
+          <a class="btn btn-primary" onclick="switchSection('projects')">View projects</a>
+          <a class="btn btn-ghost" href="mailto:ritika.ugale@uni-potsdam.de">Get in touch</a>
+        </div>
+        <p style="margin-top:22px;font-size:.82rem;color:var(--ink-soft);font-family:'JetBrains Mono',monospace;">Open to contribute to AI-ML research & data science roles</p>
+      </div>
+      
+      <!-- Graph Canvas Component inside the right layout column -->
+      <div class="hero-visual">
+        <canvas id="embed-canvas"></canvas>
+        <div class="visual-caption">hover to query</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION: ABOUT -->
+  <div id="about" class="portfolio-section">
+    <div class="section-head">
+      <h2 class="section-title">About</h2>
+      <span class="section-tag">Profile</span>
+    </div>
+    <hr class="rule">
+    <div class="about-grid">
+      <div class="about-text">
+        <p>I'm currently pursuing my M.Sc. in Data Science at Universität Potsdam while working as a Working Student at the Max Planck Institute for Human Development. There, I support an ongoing research project with a focus on data analysis — picking up Julia and learning Structural Equation Modeling (SEM) alongside my coursework.</p>
+        <p>Before this, I spent two and a half years as a Software Developer at Birlasoft, preparing ML-ready datasets, building Power BI dashboards, and working directly with clients like PwC and Lennar. Lately I've also been focused on LLMs, generative AI and retrieval systems — building RAG pipelines, and applying rigorous evaluation (precision@k, ROC-AUC, cross-validation) to make sure models actually generalize.</p>
+        <p>Beyond the notebook, I'm technically skilled, self-motivated, and genuinely curious to learn — and a creative at heart. Sketching is what keeps me inspired outside of data.</p>
+      </div>
+      <div class="stat-list">
+        <div class="stat-row"><span class="stat-label">Based in</span><span class="stat-value">Potsdam, Berlin, Germany</span></div>
+        <div class="stat-row"><span class="stat-label">Pursuing</span><span class="stat-value">M.Sc. Data Science, Uni Potsdam</span></div>
+        <div class="stat-row"><span class="stat-label">Working student at</span><span class="stat-value">MPI for Human Development</span></div>
+        <div class="stat-row"><span class="stat-label">Focus</span><span class="stat-value">SEM - Julia - Data Analysis - Python - NLP - LLM - AI- ML </span></div>
+        <div class="stat-row"><span class="stat-label">Languages</span><span class="stat-value">EN - DE - Marathi - Hindi</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION: EXPERIENCE -->
+  <div id="experience" class="portfolio-section">
+    <div class="section-head">
+      <h2 class="section-title">Experience</h2>
+      <span class="section-tag"></span>
+    </div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-date">Apr 2026 – Present</div>
+        <div>
+          <div class="tl-role">Working Student, Research Assistant</div>
+          <div class="tl-org">Max Planck Institute for Human Development - Berlin, Germany</div>
+          <ul>
+            <li>Assist on an ongoing research project of Julia Package developement on Brain voxel dataset with a focus on data analysis and supporting the research team from data preparation through SEM modelling.</li>
+            <li>Working on statistical programming and data workflows.</li>
+            <li>Learning and applying Structural Equation Modeling (SEM) to analyze relationships between latent and observed variables.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">Jul 2022 – Oct 2024</div>
+        <div>
+          <div class="tl-role">Software Developer</div>
+          <div class="tl-org">Birlasoft Ltd. Pune, India</div>
+          <ul>
+            <li>Prepared ML-ready datasets from relational databases using SQL and Python, enabling data-driven decisions on operational performance and efficiency.</li>
+            <li>Built Power BI dashboards and performed enterprise data analysis to track key business metrics and support process evaluations.</li>
+            <li>Collaborated with cross-functional client teams (PwC, Lennar) to define data requirements and communicate actionable insights in stakeholder reviews.</li>
+            <li>Improved production reporting reliability by resolving data quality issues and applying Git/GitHub version control best practices (branching, pull requests) for analytics workflows.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION: PROJECTS (BOOK) -->
+  <div id="projects" class="portfolio-section">
+    <div class="section-head">
+      <h2 class="section-title">Projects</h2>
+      <span class="section-tag">Selected work</span>
+    </div>
+    <div class="book-wrap">
+      <div class="book">
+        <button class="book-flip book-prev" onclick="turnPage(-1)" aria-label="Previous project">‹</button>
+        <div class="book-page-static">
+          <div class="book-spine"></div>
+          <div class="ribbon" id="book-ribbon"></div>
+          <div class="book-side book-left" id="book-left"></div>
+          <div class="book-side book-right" id="book-right"></div>
+        </div>
+        <button class="book-flip book-next" onclick="turnPage(1)" aria-label="Next project">›</button>
+      </div>
+    </div>
+    <div class="book-progress" id="book-progress"></div>
+  </div>
+
+  <!-- SECTION: SKILLS -->
+  <div id="skills" class="portfolio-section">
+    <div class="section-head">
+      <h2 class="section-title">Skills</h2>
+      <span class="section-tag">Toolbox</span>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-block">
+        <div class="skill-cat">Programming &amp; Automation</div>
+        <div class="skill-items">Python (pandas, numpy, scikit-learn, statsmodels), R, SQL, FastAPI, C/C++, Julia (learning)</div>
+      </div>
+      <div class="skill-block">
+        <div class="skill-cat">Data Science &amp; ML</div>
+        <div class="skill-items">Supervised learning, predictive modelling, model evaluation, hyperparameter tuning, cross-validation, reproducibility, Structural Equation Modeling (learning)</div>
+      </div>
+      <div class="skill-block">
+        <div class="skill-cat">Deep Learning &amp; Visualization</div>
+        <div class="skill-items">TensorFlow, Keras, Matplotlib, Seaborn</div>
+      </div>
+      <div class="skill-block">
+        <div class="skill-cat">Generative AI &amp; NLP</div>
+        <div class="skill-items">RAG systems, LLMs, LangChain, SentenceTransformers, FAISS, Groq LLMs</div>
+      </div>
+      <div class="skill-block">
+        <div class="skill-cat">Experimentation &amp; Statistics</div>
+        <div class="skill-items">Hypothesis testing, experiment design, regression analysis</div>
+      </div>
+      <div class="skill-block">
+        <div class="skill-cat">Tools</div>
+        <div class="skill-items">Power BI, VS Code, Jupyter, Django, Docker, Git &amp; GitHub</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION: EDUCATION -->
+  <div id="education" class="portfolio-section">
+    <div class="section-head">
+      <h2 class="section-title">Education &amp; Certifications</h2>
+      <span class="section-tag">Credentials</span>
+    </div>
+    <div class="edu-grid">
+      <div>
+        <div class="edu-item">
+          <div class="edu-degree">M.Sc. Data Science</div>
+          <div class="edu-school">Universität Potsdam, Germany</div>
+          <div class="edu-date">Oct 2024 – Present</div>
+        </div>
+        <div class="edu-item">
+          <div class="edu-degree">B.E., Information Technology</div>
+          <div class="edu-school">Savitribai Phule Pune University, India · Grade 1.2 (German equivalent)</div>
+          <div class="edu-date">Jul 2018 – Jun 2022</div>
+        </div>
+        <div style="margin-top:34px;">
+          <div class="skill-cat" style="margin-bottom:14px;">Languages</div>
+          <div class="lang-row"><span>English</span><span class="lang-level">Proficient</span></div>
+          <div class="lang-row"><span>German</span><span class="lang-level">A2</span></div>
+          <div class="lang-row"><span>Marathi</span><span class="lang-level">Native</span></div>
+          <div class="lang-row"><span>Hindi</span><span class="lang-level">Native</span></div>
+        </div>
+      </div>
+      <div>
+        <div class="skill-cat" style="margin-bottom:14px;">Certifications</div>
+        <ul class="cert-list">
+          <li>IBM Data Science Professional Certificate — IBM</li>
+          <li>Python for Data Science — IBM</li>
+          <li>Databases and SQL for Data Science — IBM</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-title">Let's build something with data.</div>
+    <div class="footer-links">
+      <a href="mailto:ritika.ugale@uni-potsdam.de">ritika.ugale@uni-potsdam.de</a>
+      <a href="tel:+4915563005805">+49 1556 3005805</a>
+      <a href="https://www.linkedin.com/in/ritika-ugale-0607201b2/" target="_blank" rel="noopener">LinkedIn ↗</a>
+      <a href="https://github.com/ritikaugale" target="_blank" rel="noopener">GitHub ↗</a>
+      <a href="https://gitup.uni-potsdam.de/ugale" target="_blank" rel="noopener">Gitlab ↗</a>
+    </div>
+  </div>
+  <div class="copyright">© 2026 Ritika Ugale · Potsdam, Germany</div>
+</footer>
+
+<script>
+/* ---------- SPA Navigation System ---------- */
+function switchSection(sectionId) {
+  const sections = document.querySelectorAll('.portfolio-section');
+  const links = document.querySelectorAll('.nav-links li');
+  
+  sections.forEach(section => {
+    if (section.classList.contains('active')) {
+      section.style.opacity = '0';
+      section.style.transform = 'translateY(-8px)';
+      setTimeout(() => {
+        section.classList.remove('active');
+        
+        const target = document.getElementById(sectionId);
+        target.classList.add('active');
+        window.scrollTo(0, 0); 
+        
+        setTimeout(() => {
+          target.style.opacity = '1';
+          target.style.transform = 'translateY(0)';
+        }, 50);
+      }, 200);
+    }
+  });
+
+  links.forEach(link => {
+    link.classList.remove('active');
+    const onclickAttr = link.querySelector('a').getAttribute('onclick');
+    if (onclickAttr && onclickAttr.includes(sectionId)) {
+      link.classList.add('active');
+    }
+  });
+}
+
+/* ---------- Project Book ---------- */
+const projects = [
+  {
+    date: 'Jan 2026',
+    title: 'RAG Chatbot for Assistive-Tech Research',
+    metric: 'precision@5 = 0.87',
+    bullets: [
+      'Built an end-to-end RAG chatbot over assistive-tech research PDFs using LangChain, SentenceTransformers, and FAISS-based similarity search, enabling interactive access to user-uploaded PDFs and text files.',
+      'Deployed the RAG pipeline as a FastAPI backend with a Streamlit chat UI and containerized it with Docker for reproducible, environment-agnostic setup.',
+      'Integrated Groq LLMs via LangChain to generate grounded, context-aware answers and display retrieved supporting passages in the UI for transparency.',
+      'Evaluated retrieval quality with precision@5 on a labeled question set, achieving 0.87 precision@5 for document-level relevance.'
+    ],
+    tags: ['LangChain','FAISS','FastAPI','Docker'],
+    color: '#535CDB'
+  },
+  {
+    date: 'Sep 2025',
+    title: 'Creditworthiness Prediction',
+    metric: 'Accuracy · Precision · Recall · ROC-AUC',
+    bullets: [
+      'Developed a modular supervised learning pipeline to predict loan applicants\' creditworthiness, including data cleaning, handling missing values, categorical encoding, and feature scaling.',
+      'Built and compared multiple classifiers (logistic regression, random forest, kernel-based models) and tuned hyperparameters via nested cross-validation to improve generalization.',
+      'Evaluated models with Accuracy, Precision, Recall, ROC-AUC and selected the best model for deployment based on performance and business constraints.'
+    ],
+    tags: ['scikit-learn','pandas','CV tuning'],
+    color: '#14B8B4'
+  },
+  {
+    date: 'Feb 2022',
+    title: 'Visual Aid for Disabled People',
+    metric: '10+ object classes, real-time inference',
+    bullets: [
+      'Built a real-time object detection system using the TensorFlow API, Python tools, and Computer Vision.',
+      'Integrated detection with text-to-speech using TensorFlow Lite and OpenCV.',
+      'Trained a deep learning model on the COCO dataset for 10+ common object classes.'
+    ],
+    tags: ['TensorFlow','OpenCV','TF Lite'],
+    color: '#FF6B4A'
+  }
+];
+let currentPage = 0;
+
+function renderBook(){
+  const p = projects[currentPage];
+  const left = document.getElementById('book-left');
+  const right = document.getElementById('book-right');
+  const ribbon = document.getElementById('book-ribbon');
+  if(!left || !right) return;
+
+  left.setAttribute('data-num', String(currentPage+1).padStart(2,'0'));
+  left.innerHTML = `
+    <div class="page-index">${p.date}</div>
+    <div class="page-title">${p.title}</div>
+    <div class="page-metric">${p.metric}</div>
+  `;
+  right.innerHTML = `
+    <ul class="page-desc">${p.bullets.map(b => `<li>${b}</li>`).join('')}</ul>
+    <div class="skills-label">Skills included</div>
+    <div class="page-tags">${p.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+  `;
+  ribbon.style.background = p.color;
+  ribbon.textContent = String(currentPage+1).padStart(2,'0');
+  document.getElementById('book-progress').textContent =
+    `Page ${currentPage+1} of ${projects.length} — click the arrows to turn`;
+}
+
+function turnPage(dir){
+  const page = document.querySelector('.book-page-static');
+  page.style.transition = 'transform .5s cubic-bezier(.4,0,.2,1), opacity .5s ease';
+  page.style.transformOrigin = dir > 0 ? 'left center' : 'right center';
+  page.style.transform = dir > 0 ? 'rotateY(-100deg)' : 'rotateY(100deg)';
+  page.style.opacity = '0.15';
+  setTimeout(() => {
+    currentPage = (currentPage + dir + projects.length) % projects.length;
+    renderBook();
+    page.style.transition = 'none';
+    page.style.transform = dir > 0 ? 'rotateY(80deg)' : 'rotateY(-80deg)';
+    requestAnimationFrame(() => {
+      page.style.transition = 'transform .5s cubic-bezier(.4,0,.2,1), opacity .5s ease';
+      page.style.transform = 'rotateY(0deg)';
+      page.style.opacity = '1';
+    });
+  }, 260);
+}
+
+renderBook();
+
+/* ---------- Local Embedding Space Canvas ---------- */
+(function(){
+  const canvas = document.getElementById('embed-canvas');
+  if (!canvas) return;
+
+  const ctx = canvas.getContext('2d');
+  const labels = ['RAG','FAISS','SQL','Power BI','ROC-AUC','LangChain','Docker','scikit-learn','FastAPI','Git','Python','Cross-val','LLMs','NLP','Julia','SEM'];
+  let W, H, dpr;
+  let points = [];
+  let mouse = {x:-9999, y:-9999};
+
+  function resize(){
+    const container = canvas.parentElement;
+    W = container.clientWidth || 400;
+    H = container.clientHeight || 360;
+    dpr = window.devicePixelRatio || 1;
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    seed();
+  }
+
+  canvas.addEventListener('mousemove', e => {
+    const rect = canvas.getBoundingClientRect();
+    mouse.x = e.clientX - rect.left;
+    mouse.y = e.clientY - rect.top;
+  });
+
+  canvas.addEventListener('mouseleave', () => {
+    mouse.x = -9999;
+    mouse.y = -9999;
+  });
+
+  function seed(){
+    points = labels.map((label, i) => {
+      const a = (i/labels.length) * Math.PI*2 + 0.3;
+      const r = 0.32 + 0.18*Math.sin(i*2.1);
+      return {
+        label,
+        x: W*0.5 + Math.cos(a)*W*r*(0.7+0.3*Math.random()),
+        y: H*0.5 + Math.sin(a)*H*r*(0.7+0.3*Math.random()),
+        baseX:0, baseY:0,
+        phase: Math.random()*Math.PI*2
+      };
+    });
+    points.forEach(p=>{p.baseX=p.x; p.baseY=p.y;});
+  }
+
+  function dist(a, b){ return Math.hypot(a.x - b.x, a.y - b.y); }
+
+  let t = 0;
+  function draw(){
+    t += 0.006;
+    ctx.clearRect(0, 0, W, H);
+
+    points.forEach(p=>{
+      p.x = p.baseX + Math.sin(t*1.3 + p.phase)*4;
+      p.y = p.baseY + Math.cos(t*1.1 + p.phase)*4;
+    });
+
+    ctx.lineWidth = 1;
+    for(let i=0;i<points.length;i++){
+      for(let j=i+1;j<points.length;j++){
+        const d = dist(points[i],points[j]);
+        if(d < W*0.45){
+          ctx.strokeStyle = 'rgba(162, 168, 184, 0.08)';
+          ctx.beginPath();
+          ctx.moveTo(points[i].x,points[i].y);
+          ctx.lineTo(points[j].x,points[j].y);
+          ctx.stroke();
+        }
+      }
+    }
+
+    let query = null, qd = Infinity;
+    points.forEach(p => {
+      const d = dist(p, mouse);
+      if(d < qd){ qd = d; query = p; }
+    });
+
+    const active = qd < 70;
+    let neighbors = [];
+
+    if(active && query){
+      neighbors = points
+        .filter(p => p !== query)
+        .map(p => ({p, d: dist(p, query)}))
+        .sort((a,b) => a.d - b.d)
+        .slice(0, 3);
+
+      neighbors.forEach(n => {
+        ctx.strokeStyle = '#FF6B4A';
+        ctx.lineWidth = 1.4;
+        ctx.beginPath();
+        ctx.moveTo(query.x, query.y);
+        ctx.lineTo(n.p.x, n.p.y);
+        ctx.stroke();
+      });
+    }
+
+    points.forEach(p => {
+      const isQuery = active && p === query;
+      const isNeighbor = active && neighbors.some(n => n.p === p);
+      
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, isQuery ? 6 : isNeighbor ? 5 : 3.4, 0, Math.PI*2);
+      ctx.fillStyle = isQuery ? '#535CDB' : isNeighbor ? '#FF6B4A' : '#14B8B4';
+      ctx.globalAlpha = isQuery || isNeighbor ? 1 : 0.6;
+      ctx.fill();
+      ctx.globalAlpha = 1;
+
+      if(isQuery || isNeighbor) {
+        ctx.font = "500 11px 'JetBrains Mono', monospace";
+        ctx.fillStyle = '#F4F5F1';
+        ctx.fillText(p.label, p.x + 9, p.y + 4);
+      }
+    });
+
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize', resize);
+  setTimeout(resize, 100);
+  requestAnimationFrame(draw);
+})();
+</script>
+
+</body>
+</html>
