@@ -458,7 +458,7 @@
   <div id="hero-view" class="portfolio-section active">
     <div class="hero">
       <div>
-        <div class="eyebrow">Working Student, MPI for Human Development & M.Sc. Data Science</div>
+        <div class="eyebrow">Working Student, Max Planck Institute of Human Development & M.Sc. Data Science</div>
         <h1>Turning raw data into <em>retrievable</em> knowledge.</h1>
         <p class="hero-desc">I turn data into decisions — with a toolkit spanning Python, ML, and LLMs, and a curiosity that never really clocks out.</p>
         <div class="hero-cta">
@@ -691,6 +691,19 @@ const projects = [
     color: '#535CDB'
   },
   {
+    date: 'April 2026',
+    title: 'Clickbait Spoiler Classification',
+    metric: 'Macro-F1',
+    bullets: [
+      'Implemented a 12-layer BERT Transformer architecture from scratch using PyTorch primitives, constructing custom Multi-Head Self-Attention modules, GELU Feedforward layers, positional/token embeddings, and residual connections.'
+      'Engineered a pure NumPy Softmax Logistic Regression baseline with custom TF-IDF feature extraction, sublinear scaling, L2 regularization, cross-entropy gradient math, and SGD optimization.'
+      'Achieved an 11-point boost in Macro-F1 (0.50 → 0.60) on imbalanced multi-class dataset (phrase, passage, multi categories) by fine-tuning contextual BERT embeddings over traditional n-gram models.'
+      'Built a custom evaluation and metrics engine in NumPy computing per-class Precision, Recall, and Macro-F1 to accurately diagnose minority class performance and mitigate class imbalance issues.'
+    ],
+    tags: ['Python', 'PyTorch', 'NumPy', 'Transformers'],
+    color: '#FF6B4A'
+  },
+  {
     date: 'Sep 2025',
     title: 'Creditworthiness Prediction',
     metric: 'Accuracy · Precision · Recall · ROC-AUC',
@@ -714,6 +727,9 @@ const projects = [
     tags: ['TensorFlow','OpenCV','TF Lite'],
     color: '#FF6B4A'
   }
+  
+
+  
 ];
 let currentPage = 0;
 
